@@ -7,8 +7,18 @@ import About from "./pages/About"
 import Favorites from "./pages/Favorites"
 import Navbar from "./components/NavBar"
 import FormUser from "./pages/FormUser"
-
+import { useAppDispatch,useAppSelector } from "./hooks/store"
+import { fetchProducts } from "./app/productsSlice"
+import { useEffect } from "react"
 function App() {
+
+const dispatch=useAppDispatch()
+const status=useAppSelector((state)=>state.products.status)
+
+ useEffect(() => {
+    if(status==="idle")
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
   return (
     <>

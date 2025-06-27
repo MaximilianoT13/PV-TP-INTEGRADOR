@@ -2,17 +2,25 @@ import { Box, Card, Inset, Strong, Text } from '@radix-ui/themes'
 import { Link } from 'react-router-dom'
 import FavoriteButton from './FavoriteButton'
 import { setCurrentItem } from '../app/productsSlice'
-import { useAppDispatch } from '../hooks/store'
+import { useAppDispatch,useAppSelector } from '../hooks/store'
 
 function ProductItem({ product }) {
 
 const dispatch=useAppDispatch()
 
+const isFavorite = useAppSelector(state =>
+    product ? state.products.favorites.includes(Number(product.id)) : false
+  );
+
   return (
     <Box position={"relative"}>
-      <FavoriteButton productId={product.id} />
+      <FavoriteButton productId={product.id} isFavorite={isFavorite} />
       <Card size="2" style={{ height: "100%" }} asChild>
-        <Link to={`/products/${product.id}`} onClick={()=>dispatch(setCurrentItem(product))}>
+        
+        <Link to={`/products/${product.id}`}   
+           onClick={()=>dispatch(setCurrentItem(product))}
+           >
+
           <Inset clip="padding-box" side="top" pb="current">
             <img
               src={product.image}

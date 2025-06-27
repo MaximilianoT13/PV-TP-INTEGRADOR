@@ -6,46 +6,38 @@ import { useEffect } from 'react';
 
 const ProductDetail = () => {
 
-  const { id } = useParams()
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+const { id } = useParams()
+const navigate = useNavigate();
+const dispatch = useAppDispatch();
+const status=useAppSelector( state => state.products.statusFetchById)
+const product=useAppSelector(state => state.products.currentItem)
 
-  const product = useAppSelector((state) => state.products.currentItem)  
+//MANEJO DE PRODUCTOS
+useEffect(()=>{
 
-  const local=useAppSelector((state)=>state.products.localProducts.find((e)=> e.id === Number(id)))
-  const api=useAppSelector((state)=>state.products.apiProducts.find((e)=> e.id === Number(id)))
+  if(!id) return
 
-   const isFavorite = useAppSelector(state =>
+  if(!product || product.id !== Number(id))
+    dispatch(fetchProductById(id))
+
+},[dispatch,id,product])
+  
+ const isFavorite = useAppSelector(state =>
     product ? state.products.favorites.includes(Number(product.id)) : false
   );
-
-  useEffect(()=>{
-  
-    if(!product)
-   {   if(api){
-      dispatch(setCurrentItem(api))
-      return}
-
-       if(local){
-      dispatch(setCurrentItem(local))
-      return }
-    
-    dispatch(fetchProductById(id))
-   }
-  },[id,product])
-
-
  
   const handleToggleFavorite = () => {
     dispatch(toggleFavorite(product.id));
   };
+  if(status==="loading") return <h1>cargando</h1>
+
   if (!product) {
     return <p>Producto no encontrado</p>;
   }
+   
 
   return (
     <div>
-      
       <h2>{product.title}</h2>
       <img src={product.image} alt={product.title} />
       <p>Descripción: {product.description}</p>
@@ -58,6 +50,7 @@ const ProductDetail = () => {
       <Button onClick={() => navigate(-1)} variant="soft" size="2" color="blue">
         Volver
       </Button>
+      
       <Link to={`/products/${product.id}/edit`}>Editar producto</Link>
     </div>
   )

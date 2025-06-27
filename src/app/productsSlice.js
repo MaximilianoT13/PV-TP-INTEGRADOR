@@ -52,6 +52,7 @@ const productsSlice = createSlice({
         if(index !== -1)
           state.apiProducts[index]=action.payload
       }
+      state.currentItem=action.payload
     },
     deleteProduct: (state, action) => {
       const {id, local = false } = action.payload
@@ -90,7 +91,7 @@ const productsSlice = createSlice({
     setCurrentItem: (state,action) => {
       state.currentItem=action.payload
     },
-
+    
     clearFavorites: (state) => {
       state.favorites = [];
       localStorage.removeItem('favorites');
@@ -115,7 +116,9 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProductById.fulfilled, (state, action) => {
         state.statusFetchById = 'succeeded';
-        state.currentItem = action.payload;
+        state.currentItem = action.payload || null;
+        if(!state.currentItem)
+          state.currentItem = state.localProducts.find((e)=> e.id == action.meta.arg) || null
       })
       .addCase(fetchProductById.rejected, (state) => {
         state.statusFetchById= "failed"
