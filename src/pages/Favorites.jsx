@@ -6,19 +6,24 @@ import { Grid } from '@radix-ui/themes';
 const Favorites= ()=> {
 const dispatch=useAppDispatch()
 const {apiProducts,localProducts,favorites,status}=useAppSelector(state=>state.products)
-
-
-
+const logged=useAppSelector(state => state.auth.sessionUser)
 useEffect(()=>{
   if(status==="idle")
   dispatch(fetchProducts())
 },[dispatch,status])
 
-const products = useMemo(()=>{
- return [...apiProducts,...localProducts].filter(
-  product => favorites.includes(product.id)
-)
-},[apiProducts,localProducts,favorites])  
+
+
+  const products = useMemo(()=>{
+  return [...apiProducts,...localProducts].filter(product => {
+
+    if(logged)
+      return logged.favorites.includes(product.id) ?? false
+    else 
+      return favorites.includes(product.id) ?? false
+    
+})},[apiProducts,localProducts,favorites,logged])  
+
 
 if(products.length===0) return <h1>Lista de Favoritos vacia</h1>
 
