@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { logoutSession } from '../app/usersSlice';
 import { useEffect } from 'react';
+import PrivateRoutes from './privateRoute';
 const Navbar = () => {
 
 const dispatch=useDispatch()
@@ -40,25 +41,19 @@ const logOut=()=>{
             <Text size="5" weight="bold" color="indigo">Home</Text>
           </NavLink>
       </TabNav.Link>
-      <TabNav.Link asChild active>
-          <NavLink to="/products/add" >
-            <Text size="5" weight="bold" color="indigo">Crear Producto</Text>
-          </NavLink>
-      </TabNav.Link>
+     
       <TabNav.Link asChild active>
           <NavLink to="/favorites" >
             <Text size="5" weight="bold" color="indigo">Favoritos</Text>
           </NavLink>
       </TabNav.Link>
-      <TabNav.Link asChild active>
-          <NavLink to="/about">
-            <Text size="5" weight="bold" color="indigo">Acerca De</Text>
-          </NavLink>
-      </TabNav.Link>
-
-
+      {
+        logged ? <PrivateRoutes isActive={logged ? true : false}/> : []
+      }
+    
+   
     </TabNav.Root>
-     
+      
      <DropdownMenu.Root>
        <DropdownMenu.Trigger>
         <button style={{ outline: 'none', border: 'none', background: 'transparent' }}>

@@ -54,13 +54,13 @@ const usersSlice=createSlice({
         state.sessionUser=null
         localStorage.removeItem("session")
     },
-    toggleFavorites: (state,action)=>{
+    toggleUserFavorites: (state,action)=>{
         const productID = action.payload
         const favIndex = state.sessionUser.favorites.indexOf(productID)
         if(favIndex===-1)
-            state.sessionUser.favorites.push(pid)
+            state.sessionUser.favorites.push(productID)
         else 
-            state.sessionUser.favorites.splice(i,1)
+            state.sessionUser.favorites.splice(favIndex,1)
         localStorage.setItem("session",JSON.stringify(state.sessionUser))
     },
     clearError: (state)=>{
@@ -68,5 +68,5 @@ const usersSlice=createSlice({
     }
     }
 })
-export const { addUser, loginSession, logoutSession, toggleFavorites, clearError } = usersSlice.actions
+export const { addUser, loginSession, logoutSession, toggleUserFavorites, clearError } = usersSlice.actions
 export default usersSlice.reducer

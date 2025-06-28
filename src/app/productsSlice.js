@@ -63,7 +63,6 @@ const productsSlice = createSlice({
         {
           state.localProducts.splice(index,1)
           localStorage.setItem("products",JSON.stringify(state.localProducts))
-      
         }
       }
       else{

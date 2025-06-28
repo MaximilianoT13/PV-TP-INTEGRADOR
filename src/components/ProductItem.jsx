@@ -3,15 +3,19 @@ import { Link } from 'react-router-dom'
 import FavoriteButton from './FavoriteButton'
 import { setCurrentItem } from '../app/productsSlice'
 import { useAppDispatch,useAppSelector } from '../hooks/store'
+import { useEffect } from 'react'
 
 function ProductItem({ product }) {
 
 const dispatch=useAppDispatch()
+const logged=useAppSelector(state => state.auth.sessionUser)
 
-const isFavorite = useAppSelector(state =>
-    product ? state.products.favorites.includes(Number(product.id)) : false
-  );
-
+const isFavorite=useAppSelector( state => {
+  if(logged)
+    return state.auth.sessionUser.favorites.includes(Number(product.id)) ?? false
+  else
+    return state.products.favorites.includes(Number(product.id)) ?? false
+})
   return (
     <Box position={"relative"}>
       <FavoriteButton productId={product.id} isFavorite={isFavorite} />
